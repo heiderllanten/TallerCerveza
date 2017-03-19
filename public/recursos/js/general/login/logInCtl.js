@@ -1,7 +1,7 @@
 "use strict";
-
+ var as="";
 /*El use strict hace que se deba codificar de manera correcta, siendo estricto
- * a la hora de compilar el codigo ejemplo: 
+ * a la hora de compilar el codigo ejemplo:
  * x = 3.14; // This will cause an error (x is not defined)*/
 
 
@@ -21,13 +21,13 @@ app.controller('CtlLogIn', function ($scope, logInService) {
     $scope.logIn = function (form) {
         /*Al ser el servicio la llamada por http (funcion asincrona) toca definir
          * promesas con el "then", que se ejecuta unicamente cuando se le retorna
-         * un valor valido. Este se ejecuta unicamente cuando el llamado http 
-         * consume el REST ("REST" es un paradigma, mientras"RESTful" describe el 
+         * un valor valido. Este se ejecuta unicamente cuando el llamado http
+         * consume el REST ("REST" es un paradigma, mientras"RESTful" describe el
          * uso de ese paradigma*/
 
          /*Si el formulario esta bien validado*/
          if (form) {
-            /*Se ejecuta la funcion mandando por parametro el objeto identificacion, 
+            /*Se ejecuta la funcion mandando por parametro el objeto identificacion,
             * el cual esta asociado a los input*/
             logInService.logIn($scope.identificacion).then(function (response) {
                 /*El resultado de la promesa se recibe por parametro*/
@@ -35,7 +35,7 @@ app.controller('CtlLogIn', function ($scope, logInService) {
                     alert(response.usuario+""+response.password);
                 } else {
                     alert("Usuario o contrasena incorrectos");
-                    /*Solo con limpiar el objeto se limpian todos los input 
+                    /*Solo con limpiar el objeto se limpian todos los input
                     * asociados*/
                     $scope.identificacion = "";
                 }
@@ -46,9 +46,3 @@ app.controller('CtlLogIn', function ($scope, logInService) {
     };
 
 });
-
-
-
-
-
-
