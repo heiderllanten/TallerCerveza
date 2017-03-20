@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<br>
+<br>
+<br>
+
+<div class="container">
+      <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+              <div class="panel panel-login">
+                  <div class="panel-heading">
+
+                      <hr>
+                  </div>
+                  <div class="panel-body">
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <form id="cerveza-form" role="form" name="formCerveza"
+                                    ng-controller="CtlCerveza" style="display: block;">
+                                  <div class="form-group">
+                                    <label >Nombre</label>
+                                      <input type="text" name="nombre"
+                                             id="nombre" class="form-control"
+                                             placeholder="Nombre"
+                                             ng-model="cerveza.nombre" required>
+                                  </div>
+                                  <div class="form-group">
+                                    <label >Descripcion</label>
+                                      <input type="text" name="descripcion"
+                                             id="descripcion"
+                                             class="form-control" placeholder="Descripcion"
+                                             ng-model="cerveza.descripcion" required>
+                                  </div>
+                                  <div class="form-group">
+                                    <label >Porcenta de Alcohol</label>
+                                      <input type="number" name="porcentaje_alcohol"
+                                             id="porcentaje_alcohol" class="form-control"
+                                             placeholder="Porcentaje de Alcohol"
+                                             ng-model="cerveza.porcentaje_alcohol" required>
+                                  </div>
+                                  <div class="form-group">
+                                      <div class="row">
+                                          <div class="col-sm-6 col-sm-offset-3">
+                                              <input type="button" name="crear-submit"
+                                                     id="crear-submit"
+                                                     class="form-control btn btn-login"
+                                                     value="Crear" ng-click="crearCerveza(formCerveza.$valid)">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                      <div class="row">
+                                          <div class="col-sm-6 col-sm-offset-3">
+                                              <input type="button" name="editar-submit"
+                                                     id="editar-submit"
+                                                     class="form-control btn btn-login"
+                                                     value="Editar" ng-click="editarCerveza(formCerveza.$valid)">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="panel panel-primary" style="width: 900px;">
+                                    <div class="panel-heading">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="glyphicon glyphicon-search"></i>
+                                            </span>
+                                            <input type="text" class="form-control"
+                                                   placeholder="Buscar Costo" ng-model="txtBuscar">
+                                        </div>
+                                    </div>
+                                  <div class="panel-body">
+                                     <table class="table table-striped">
+                                         <thead>
+                                             <tr>
+                                                 <th>
+                                                     <a ng-click="ordenarPor('nombre')">Nombre</a>
+                                                     <a class="caret" ng-click="ordenarPor('-nombre')"></a>
+                                                 </th>
+                                                 <th>
+                                                     <a ng-click="ordenarPor('descripcion')">Nombre</a>
+                                                     <a class="caret" ng-click="ordenarPor('-descripcion')"></a>
+                                                 </th>
+                                                 <th>
+                                                     <a ng-click="ordenarPor('porcentaje_alcohol')">Porcentaje de alcohol</a>
+                                                     <a class="caret" ng-click="ordenarPor('-porcentaje_alcohol')"></a>
+                                                 </th>
+                                                 <th>
+                                                     <a>Opcion</a>
+                                                 </th>
+                                             </tr>
+                                         </thead>
+                                         <tbody>
+                                             <tr ng-repeat="obj in cervezas| orderBy:ordenarSeleccionado
+                                                         | filter:txtBuscar" ng-click="llenarCampos(obj)">
+                                                 <td>{{obj.nombre}}</td>
+                                                 <td>{{obj.descripcion| uppercase}}</td>
+                                                 <td>{{obj.porcentaje_alcohol}}</td>
+                                                 <td><input type="button" class="btn btn-default" value="Eliminar"
+                                                            ng-click="eliminarcerveza(obj)"></td>
+                                             </tr>
+                                         </tbody>
+                                     </table>
+                                 </div>
+                               </div>
+                              </form>
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>

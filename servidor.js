@@ -6,7 +6,7 @@ var url = require('url');
 var fs = require('fs');
 
 var querystring = require('querystring');
-
+var dao = require('./public/recursos/dao/dao');
 var servidor;
 
 /*Archivos soportados en la transferencia*/
@@ -20,12 +20,25 @@ var mime = {
 };
 
 function configurarServidor() {
+	dao.conectardb();
 	servidor = http.createServer(function (entrada, respuesta) {
-		var ruta = definirRuta(entrada);		
+		var ruta = definirRuta(entrada);
 		switch(ruta){
 			//si se mandaron los datos por POST
-			case '/intentoLogIn':{
-				grabarIntento(entrada, respuesta);
+			case 'public/crearCerveza':{
+				dao.crear(entrada,respuesta);
+				break;
+			}
+			case 'public/editarCerveza':{
+				dao.editarCerveza(entrada,respuesta);
+				break;
+			}
+			case 'public/listarCervezas':{
+				dao.listarCervezas(respuesta);
+				break;
+			}
+			case 'public/eliminarcerveza':{
+				dao.eliminarCerveza(entrada,respuesta);
 				break;
 			}
 
@@ -42,7 +55,7 @@ function configurarServidor() {
 				})
 			}
 		}
-		
+
 	});
 }
 
