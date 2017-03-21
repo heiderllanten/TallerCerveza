@@ -1,1 +1,107 @@
-Produccion
+<form class="form-horizontal" role="form" name="formProduccion" style="margin-top: 
+80px; width: 600px;">
+<div class="page-header">
+    <h1>produccion</h1>
+</div>
+<div class="form-group">
+    <label for="selTipo" class="col-lg-2 control-label">Cerveza</label>
+    <div class="col-lg-10">
+        <select class="form-control" id="setTipo" ng-model="produccion.tipo" 
+        ng-change="listarTiposCerveza()">
+        <option value="" disabled selected>Seleccione una Opcion</option>                          
+    </select>
+</div>
+</div>
+<div class="form-group">
+    <label for="selPresentacion" class="col-lg-2 control-label">Presentacion</label>
+    <div class="col-lg-10">
+        <select class="form-control" id="selDepartamento" ng-model="produccion.departamento">
+            <option value="" disabled selected>Seleccione una Opcion</option>
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label for="txtCodigo" class="col-lg-2 control-label">Codigo</label>
+    <div class="col-lg-10">
+      <input type="text" class="form-control" id="txtCodigo"
+      placeholder="Codigo" ng-model="produccion.codigo" required>
+  </div>
+</div>
+<div class="form-group">
+    <label for="dateFecha" class="col-lg-2 control-label">Fecha</label>
+    <div class="col-lg-10">
+        <input type="dat" name="">
+        <input type="date" class="form-control" id="dateFecha"
+        placeholder="Fecha" ng-model="produccion.fecha" required>
+    </div>
+</div>
+<div class="form-group">
+    <label for="txtDescripcion" class="col-lg-2 control-label">Produccion</label>
+    <div class="col-lg-10">        
+        <textarea class="form-control" rows="5" id="txtDescripcion" placeholder="Descripcion"
+        ng-model="produccion.descripcion"></textarea>      
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+        <input type="button" class="btn btn-default" value="Guardar" ng-click="crear(formProduccion.$valid)">
+        <input type="button" class="btn btn-default" value="Buscar" ng-click="crear(formProduccion.$valid)">
+        <input type="button" class="btn btn-default" value="Editar" ng-click="crear(formProduccion.$valid)">
+        <input type="button" class="btn btn-default" value="Eliminar" ng-click="crear(formProduccion.$valid)">
+    </div>
+</div>
+</form>
+<div class="panel panel-primary" style="width: 1000px;">
+    <div class="panel-heading">
+        <div class="input-group">
+            <span class="input-group-addon">
+                <i class="glyphicon glyphicon-search"></i>
+            </span>
+            <input type="text" class="form-control" 
+            placeholder="Buscar Produccion" ng-model="txtBuscar">
+        </div>
+    </div>     
+    <div class="panel-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        <a ng-click="ordenarPor('codigo')">Codigo</a>
+                        <a class="caret" ng-click="ordenarPor('-codigo')"></a>
+                    </th>
+                    <th>
+                        <a ng-click="ordenarPor('nombre')">Nombre</a>
+                        <a class="caret" ng-click="ordenarPor('-nombre')"></a>
+                    </th>
+                    <th>
+                        <a ng-click="ordenarPor('descripcion')">Descripcion</a>
+                        <a class="caret" ng-click="ordenarPor('-descripcion')"></a>
+                    </th>
+                    <th>
+                        <a ng-click="ordenarPor('departamento')">Departamento</a>
+                        <a class="caret" ng-click="ordenarPor('-departamento')"></a>
+                    </th>
+                    <th>
+                        <a ng-click="ordenarPor('pais')">Pais</a>
+                        <a class="caret" ng-click="ordenarPor('-pais')"></a>
+                    </th>
+                    <th>
+                        <a>Opcion</a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="obj in produccions| orderBy:ordenarSeleccionado
+                | filter:txtBuscar" ng-click="llenarCampos(obj)">
+                <td>{{obj.codigo}}</td>
+                <td>{{obj.nombre| uppercase}}</td>
+                <td>{{obj.descripcion}}</td>
+                <td>{{obj.nombredepto| uppercase}}</td>
+                <td>{{obj.nombrepais| uppercase}}</td>
+                <td><input type="button" class="btn btn-default" value="Eliminar" 
+                   ng-click="eliminar(obj)"></td>
+               </tr>
+           </tbody>
+       </table>
+   </div>        
+</div>
