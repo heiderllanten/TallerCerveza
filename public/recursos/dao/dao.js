@@ -50,6 +50,31 @@ function crear(pedido,respuesta) {
         });
   });
 }
+function crearPresentacion(pedido,respuesta) {
+  var info = '';
+  pedido.on('data', function (datosparciales) {
+      info += datosparciales;
+  });
+  pedido.on('end', function () {
+      var datos = querystring.parse(info);
+      var registro = {
+          ml: datos['ml'],
+          valor: datos['valor']
+      };
+      var sql = 'insert into presentacion set ?';
+      conexion.query(sql, registro, function (error, resultado) {
+          if (error) {
+            console.log("error");
+              console.log('error en la consulta');
+              respuesta.write('{"exito":false}');
+              respuesta.end();
+          }else{
+            respuesta.write('{"exito":true}');
+            respuesta.end();
+          }
+        });
+  });
+}
 
 
 
@@ -71,6 +96,34 @@ function listarCervezas(respuesta) {
             res+='"nombre":"'+filas[i].nombre+'",';
             res+='"descripcion":"'+filas[i].descripcion+'",';
             res+='"porcentaje_alcohol":"'+filas[i].porcentaje_alcohol+'"},';
+          }
+          res=res.slice(0,-1);
+          res+=']';
+          console.log(res);
+          respuesta.write(res);
+          respuesta.end();
+        }
+    });
+}
+
+function listarPresentaciones(respuesta) {
+
+    var sql = 'select ml,valor from presentacion';
+
+    //Se realiza la consulta, recibiendo por parametro filas los registros de la base de datos.
+    conexion.query(sql, function (error, filas) {
+        if (error) {
+            console.log('error en el listado');
+            respuesta.write(null);
+            respuesta.end();
+            return;
+        }else{
+          var res='[';
+          for(var i=0;i<filas.length;i++){
+            res+='{';
+            res+='"ml":"'+filas[i].ml+'",';
+            res+='"valor":"'+filas[i].valor+'"},';
+
           }
           res=res.slice(0,-1);
           res+=']';
@@ -113,6 +166,38 @@ function editarCerveza(pedido,respuesta) {
   });
 }
 
+function editarPresentacion(pedido,respuesta) {
+  var info = '';
+  pedido.on('data', function (datosparciales) {
+      info += datosparciales;
+  });
+  pedido.on('end', function () {
+      var datos = querystring.parse(info);
+
+      var sql = "update presentacion  set ml="+datos['ml']+",valor="+datos['valor']+" where ml=?";
+      console.log(sql);
+      conexion.query(sql, datos['ml'],function (error, resultado) {
+          if (error) {
+            console.log("error");
+              console.log('error en la consulta');
+              respuesta.write('{"exito":"error"}');
+              respuesta.end();
+          }else{
+            console.log(resultado.affectedRows);
+            if(resultado.affectedRows>0){
+
+              respuesta.write('{"exito":true}');
+              respuesta.end();
+            }else{
+              respuesta.write('{"exito":false}');
+              respuesta.end();
+            }
+
+          }
+        });
+  });
+}
+
 function eliminarCerveza(pedido, respuesta) {
     var info = '';
     pedido.on('data', function (datosparciales) {
@@ -123,6 +208,37 @@ function eliminarCerveza(pedido, respuesta) {
         var nombre = [datos['nombre']];
         var sql = 'delete from tipocerveza  where nombre=?';
         conexion.query(sql, nombre, function (error, resultado) {
+            if (error) {
+                console.log('error en la consulta');
+                console.log(resultado.affectedRows);
+                respuesta.write('{"exito":"error"}');
+                respuesta.end();
+            }else{
+              console.log(resultado.affectedRows);
+              if(resultado.affectedRows>0){
+                respuesta.write('{"exito":true}');
+                respuesta.end();
+              }else{
+                respuesta.write('{"exito":false}');
+                respuesta.end();
+              }
+
+            }
+
+        });
+    });
+}
+
+function eliminarPresentacion(pedido, respuesta) {
+    var info = '';
+    pedido.on('data', function (datosparciales) {
+        info += datosparciales;
+    });
+    pedido.on('end', function () {
+        var datos = querystring.parse(info);
+        var ml = [datos['ml']];
+        var sql = 'delete from presentacion  where ml=?';
+        conexion.query(sql, ml, function (error, resultado) {
             if (error) {
                 console.log('error en la consulta');
                 console.log(resultado.affectedRows);
@@ -193,7 +309,11 @@ function consulta(pedido, respuesta) {
 //Habilita a las funciones para que sean llamadas o exportadas desde otros archivos
 exports.conectardb = conectardb;
 exports.crear = crear;
+exports.crearPresentacion=crearPresentacion;
 exports.eliminarCerveza=eliminarCerveza;
+exports.eliminarPresentacion=eliminarPresentacion;
 exports.editarCerveza=editarCerveza;
+exports.editarPresentacion=editarPresentacion;
 exports.listarCervezas=listarCervezas;
+exports.listarPresentaciones=listarPresentaciones;
 exports.consulta = consulta;

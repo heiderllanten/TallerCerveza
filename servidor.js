@@ -29,16 +29,32 @@ function configurarServidor() {
 				dao.crear(entrada,respuesta);
 				break;
 			}
+			case 'public/crearPresentacion':{
+				dao.crearPresentacion(entrada,respuesta);
+				break;
+			}
 			case 'public/editarCerveza':{
 				dao.editarCerveza(entrada,respuesta);
+				break;
+			}
+			case 'public/editarPresentacion':{
+				dao.editarPresentacion(entrada,respuesta);
 				break;
 			}
 			case 'public/listarCervezas':{
 				dao.listarCervezas(respuesta);
 				break;
 			}
+			case 'public/listarPresentaciones':{
+				dao.listarPresentaciones(respuesta);
+				break;
+			}
 			case 'public/eliminarcerveza':{
 				dao.eliminarCerveza(entrada,respuesta);
+				break;
+			}
+			case 'public/eliminarPresentacion':{
+				dao.eliminarPresentacion(entrada,respuesta);
 				break;
 			}
 
