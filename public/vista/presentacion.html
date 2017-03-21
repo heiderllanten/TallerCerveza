@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<br>
+<br>
+<br>
+
+<div class="container">
+      <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+              <div class="panel panel-login">
+                  <div class="panel-heading">
+
+                      <hr>
+                  </div>
+                  <div class="panel-body">
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <form id="presentacion-form" role="form" name="formPresentacion"
+                                    ng-controller="CtlPresentacion" style="display: block;">
+                                  <div class="form-group">
+                                    <label >MiliLitros</label>
+                                      <input type="number" name="ml"
+                                             id="ml" class="form-control"
+                                             placeholder="ML"
+                                             ng-model="presentacion.ml" required>
+                                  </div>
+                                  <div class="form-group">
+                                    <label >Valor</label>
+                                      <input type="number" name="valor"
+                                             id="valor" class="form-control"
+                                             placeholder="valor"
+                                             ng-model="presentacion.valor" required>
+                                  </div>
+
+                                  <div class="form-group">
+                                      <div class="row">
+                                          <div class="col-sm-6 col-sm-offset-3">
+                                              <input type="button" name="crear-submit"
+                                                     id="crear-submit"
+                                                     class="form-control btn btn-login"
+                                                     value="Crear" ng-click="crearPresentacion(formPresentacion.$valid)">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                      <div class="row">
+                                          <div class="col-sm-6 col-sm-offset-3">
+                                              <input type="button" name="editar-submit"
+                                                     id="editar-submit"
+                                                     class="form-control btn btn-login"
+                                                     value="Editar" ng-click="editarPresentacion(formPresentacion.$valid)">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="panel panel-primary" style="width: 900px;">
+                                    <div class="panel-heading">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="glyphicon glyphicon-search"></i>
+                                            </span>
+                                            <input type="text" class="form-control"
+                                                   placeholder="Buscar Costo" ng-model="txtBuscar">
+                                        </div>
+                                    </div>
+                                  <div class="panel-body">
+                                     <table class="table table-striped">
+                                         <thead>
+                                             <tr>
+                                                 <th>
+                                                     <a ng-click="ordenarPor('ml')">ML</a>
+                                                     <a class="caret" ng-click="ordenarPor('-ml')"></a>
+                                                 </th>
+                                                 <th>
+                                                     <a ng-click="ordenarPor('valor')">Valor</a>
+                                                     <a class="caret" ng-click="ordenarPor('-valor')"></a>
+                                                 </th>
+                                                 <th>
+                                                     <a>Opcion</a>
+                                                 </th>
+                                             </tr>
+                                         </thead>
+                                         <tbody>
+                                             <tr ng-repeat="obj in presentaciones| orderBy:ordenarSeleccionado
+                                                         | filter:txtBuscar" ng-click="llenarCampos(obj)">
+                                                 <td>{{obj.ml}}</td>
+                                                 <td>{{obj.valor}}</td>
+                                                 <td><input type="button" class="btn btn-default" value="Eliminar"
+                                                            ng-click="eliminarPresentacion(obj)"></td>
+                                             </tr>
+                                         </tbody>
+                                     </table>
+                                 </div>
+                               </div>
+                              </form>
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>

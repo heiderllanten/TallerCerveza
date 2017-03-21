@@ -7,13 +7,18 @@
     <script src="dependencias/bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="dependencias/bower_components/angular/angular.min.js" type="text/javascript"></script>
 
-        <!--         DEPENDENCIAS ADICIONALES ANGULAR         
-                 ARCHIVO NECESARIO PARA EL MASTER PAGE 
+        <!--         DEPENDENCIAS ADICIONALES ANGULAR
+                 ARCHIVO NECESARIO PARA EL MASTER PAGE
                  PERMITE HACER EL ENRUTAMIENTO DE URL'S -->
     <script src="dependencias/bower_components/angular-route/angular-route.min.js" type="text/javascript"></script>
 
     <!-- App -->
     <script src="recursos/js/general/app.js" type="text/javascript"></script>
+		<script src="recursos/js/general/cerveza/cervezaCtl.js" type="text/javascript"></script>
+		<script src="recursos/js/general/cerveza/cervezaSer.js" type="text/javascript"></script>
+		<script src="recursos/js/general/presentacion/presentacionCtl.js" type="text/javascript"></script>
+		<script src="recursos/js/general/presentacion/presentacionSer.js" type="text/javascript"></script>
+
 
 </head>
 <body ng-app="myModule">
@@ -23,6 +28,6 @@
 	<div class="container">
 		<div ng-view></div>
 	</div>
-	
+
 </body>
 </html>
