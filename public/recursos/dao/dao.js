@@ -9,7 +9,7 @@ function conectardb() {
         host: 'localhost',
         user: 'root',
         password: '',
-        database: 'proyectocerveza'
+        database: 'tallercerveza'
     });
     //Se conecta a la base de datos
     conexion.connect(function (error) {
@@ -50,6 +50,7 @@ function crear(pedido,respuesta) {
         });
   });
 }
+
 function crearPresentacion(pedido,respuesta) {
   var info = '';
   pedido.on('data', function (datosparciales) {
@@ -76,7 +77,35 @@ function crearPresentacion(pedido,respuesta) {
   });
 }
 
-
+function crearProduccion (pedido,respuesta) {
+  var info = '';
+  pedido.on('data', function (datosparciales) {
+      info += datosparciales;
+  });
+  pedido.on('end', function () {
+      var datos = querystring.parse(info);
+      console.log(datos);
+      var registro = {
+          codigo: datos['codigo'],
+          tipo: datos['tipo'],
+          presentacion: datos['presentacion'],
+          fecha: datos['fecha'],
+          comentarios: datos['descripcion']
+      };
+      var sql = 'insert into produccion set ?';
+      conexion.query(sql, registro, function (error, resultado) {
+          if (error) {
+            console.log("error");
+              console.log('error en la consulta');
+              respuesta.write('{"exito":false}');
+              respuesta.end();
+          }else{
+            respuesta.write('{"exito":true}');
+            respuesta.end();
+          }
+        });
+  });
+}
 
 function listarCervezas(respuesta) {
 
@@ -134,6 +163,38 @@ function listarPresentaciones(respuesta) {
     });
 }
 
+function listarProducciones(respuesta) {
+
+    var sql = 'select codigo,fecha,comentarios,tipo,presentacion from produccion';
+
+    //Se realiza la consulta, recibiendo por parametro filas los registros de la base de datos.
+    conexion.query(sql, function (error, filas) {
+        if (error) {
+            console.log('error en el listado');
+            respuesta.write(null);
+            respuesta.end();
+            return;
+        }else{
+          var res='[';
+          if(filas.length > 0){
+            for(var i=0;i<filas.length;i++){
+              res+='{';
+              res+='"codigo":"'+filas[i].codigo+'",';
+              res+='"fecha":"'+filas[i].fecha+'",';
+              res+='"descripcion":"'+filas[i].comentarios+'",';
+              res+='"tipo":"'+filas[i].tipo+'",';
+              res+='"presentacion":"'+filas[i].presentacion+'"},';
+            }
+            res=res.slice(0,-1);  
+          }          
+          res+=']';
+          console.log(res);
+          respuesta.write(res);
+          respuesta.end();
+        }
+    });
+}
+
 function editarCerveza(pedido,respuesta) {
   var info = '';
   pedido.on('data', function (datosparciales) {
@@ -177,6 +238,39 @@ function editarPresentacion(pedido,respuesta) {
       var sql = "update presentacion  set ml="+datos['ml']+",valor="+datos['valor']+" where ml=?";
       console.log(sql);
       conexion.query(sql, datos['ml'],function (error, resultado) {
+          if (error) {
+            console.log("error");
+              console.log('error en la consulta');
+              respuesta.write('{"exito":"error"}');
+              respuesta.end();
+          }else{
+            console.log(resultado.affectedRows);
+            if(resultado.affectedRows>0){
+
+              respuesta.write('{"exito":true}');
+              respuesta.end();
+            }else{
+              respuesta.write('{"exito":false}');
+              respuesta.end();
+            }
+
+          }
+        });
+  });
+}
+
+function editarProduccion(pedido,respuesta) {
+  var info = '';
+  pedido.on('data', function (datosparciales) {
+      info += datosparciales;
+  });
+  pedido.on('end', function () {
+      var datos = querystring.parse(info);
+
+      var sql = "update produccion  set codigo="+datos['codigo']+", fecha='"+datos['fecha']+"', comentarios='"+datos['descripcion']+
+        "', tipo='"+datos['tipo']+"', presentacion="+datos['presentacion']+" where codigo=?";
+      console.log(sql);
+      conexion.query(sql, datos['codigo'],function (error, resultado) {
           if (error) {
             console.log("error");
               console.log('error en la consulta');
@@ -259,61 +353,49 @@ function eliminarPresentacion(pedido, respuesta) {
         });
     });
 }
-function consulta(pedido, respuesta) {
 
-    //Se obtienen datos
+function eliminarProduccion(pedido, respuesta) {
     var info = '';
-
     pedido.on('data', function (datosparciales) {
         info += datosparciales;
     });
-
     pedido.on('end', function () {
-
-        //Se obtiene el codigo
         var datos = querystring.parse(info);
-
         var codigo = [datos['codigo']];
-        //Se manda el codigo en la busqueda
-
-        var sql = 'select descripcion,precio from articulos where codigo=?';
-
-        conexion.query(sql, codigo, function (error, filas) {
+        var sql = 'delete from produccion  where codigo=?';
+        conexion.query(sql, codigo, function (error, resultado) {
             if (error) {
                 console.log('error en la consulta');
-                return;
-            }
-            //Se responde
-            respuesta.writeHead(200, {'Content-Type': 'text/html'});
-            //Se lee el registro obtenido y se sacan sus datos
-            var datos = '';
-            if (filas.length > 0) {
-                datos += 'Descripcion:' + filas[0].descripcion + '<br>';
-                datos += 'Precio:' + filas[0].precio + '<hr>';
-            } else {
-                datos = 'No existe un art�culo con dicho codigo.';
+                console.log(resultado.affectedRows);
+                respuesta.write('{"exito":"error"}');
+                respuesta.end();
+            }else{
+              console.log(resultado.affectedRows);
+              if(resultado.affectedRows>0){
+                respuesta.write('{"exito":true}');
+                respuesta.end();
+              }else{
+                respuesta.write('{"exito":false}');
+                respuesta.end();
+              }
+
             }
 
-            //Se responde
-            respuesta.write('<!doctype html><html><head></head><body>');
-            respuesta.write(datos);
-            respuesta.write('<a href="index.html">Retornar</a>');
-            respuesta.write('</body></html>');
-            respuesta.end();
         });
     });
 }
-
-
 
 //Habilita a las funciones para que sean llamadas o exportadas desde otros archivos
 exports.conectardb = conectardb;
 exports.crear = crear;
 exports.crearPresentacion=crearPresentacion;
+exports.crearProduccion=crearProduccion;
 exports.eliminarCerveza=eliminarCerveza;
 exports.eliminarPresentacion=eliminarPresentacion;
+exports.eliminarProduccion=eliminarProduccion;
 exports.editarCerveza=editarCerveza;
 exports.editarPresentacion=editarPresentacion;
+exports.editarProduccion=editarProduccion;
 exports.listarCervezas=listarCervezas;
 exports.listarPresentaciones=listarPresentaciones;
-exports.consulta = consulta;
+exports.listarProducciones=listarProducciones;
