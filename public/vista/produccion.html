@@ -1,24 +1,7 @@
-<form class="form-horizontal" role="form" name="formProduccion" style="margin-top: 
+<form class="form-horizontal" role="form" ng-controller="CtlProduccion" name="formProduccion" style="margin-top: 
 80px; width: 600px;">
 <div class="page-header">
     <h1>produccion</h1>
-</div>
-<div class="form-group">
-    <label for="selTipo" class="col-lg-2 control-label">Cerveza</label>
-    <div class="col-lg-10">
-        <select class="form-control" id="setTipo" ng-model="produccion.tipo" 
-        ng-change="listarTiposCerveza()">
-        <option value="" disabled selected>Seleccione una Opcion</option>                          
-    </select>
-</div>
-</div>
-<div class="form-group">
-    <label for="selPresentacion" class="col-lg-2 control-label">Presentacion</label>
-    <div class="col-lg-10">
-        <select class="form-control" id="selDepartamento" ng-model="produccion.departamento">
-            <option value="" disabled selected>Seleccione una Opcion</option>
-        </select>
-    </div>
 </div>
 <div class="form-group">
     <label for="txtCodigo" class="col-lg-2 control-label">Codigo</label>
@@ -28,15 +11,30 @@
   </div>
 </div>
 <div class="form-group">
+    <label for="selTipo" class="col-lg-2 control-label">Cerveza</label>
+    <div class="col-lg-10">
+        <select class="form-control" id="selTipo" ng-model="produccion.tipo" ng-options="item.nombre as item.nombre for item in cervezas">
+            <option value="" disabled selected>Seleccione una Opcion</option>                          
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label for="selPresentacion" class="col-lg-2 control-label">Presentacion</label>
+    <div class="col-lg-10">
+        <select class="form-control" id="selDepartamento" ng-model="produccion.presentacion" ng-options="item.ml as item.ml for item in presentaciones">
+            <option value="" disabled selected>Seleccione una Opcion</option>
+        </select>
+    </div>
+</div>
+<div class="form-group">
     <label for="dateFecha" class="col-lg-2 control-label">Fecha</label>
     <div class="col-lg-10">
-        <input type="dat" name="">
         <input type="date" class="form-control" id="dateFecha"
         placeholder="Fecha" ng-model="produccion.fecha" required>
     </div>
 </div>
 <div class="form-group">
-    <label for="txtDescripcion" class="col-lg-2 control-label">Produccion</label>
+    <label for="txtDescripcion" class="col-lg-2 control-label">Comentarios</label>
     <div class="col-lg-10">        
         <textarea class="form-control" rows="5" id="txtDescripcion" placeholder="Descripcion"
         ng-model="produccion.descripcion"></textarea>      
@@ -44,13 +42,11 @@
 </div>
 <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">
-        <input type="button" class="btn btn-default" value="Guardar" ng-click="crear(formProduccion.$valid)">
-        <input type="button" class="btn btn-default" value="Buscar" ng-click="crear(formProduccion.$valid)">
-        <input type="button" class="btn btn-default" value="Editar" ng-click="crear(formProduccion.$valid)">
-        <input type="button" class="btn btn-default" value="Eliminar" ng-click="crear(formProduccion.$valid)">
+        <input type="button" class="btn btn-default" value="Guardar" ng-click="crearProduccion(formProduccion.$valid)">
+        <input type="button" class="btn btn-default" value="Editar" ng-click="editarProduccion(formProduccion.$valid)">
     </div>
 </div>
-</form>
+
 <div class="panel panel-primary" style="width: 1000px;">
     <div class="panel-heading">
         <div class="input-group">
@@ -70,20 +66,20 @@
                         <a class="caret" ng-click="ordenarPor('-codigo')"></a>
                     </th>
                     <th>
-                        <a ng-click="ordenarPor('nombre')">Nombre</a>
-                        <a class="caret" ng-click="ordenarPor('-nombre')"></a>
+                        <a ng-click="ordenarPor('tipo')">Cerveza</a>
+                        <a class="caret" ng-click="ordenarPor('-tipo')"></a>
                     </th>
                     <th>
-                        <a ng-click="ordenarPor('descripcion')">Descripcion</a>
+                        <a ng-click="ordenarPor('presentacion')">Presentacion</a>
+                        <a class="caret" ng-click="ordenarPor('-presentacion')"></a>
+                    </th>
+                    <th>
+                        <a ng-click="ordenarPor('fecha')">Fecha</a>
+                        <a class="caret" ng-click="ordenarPor('-fecha')"></a>
+                    </th>
+                    <th>
+                        <a ng-click="ordenarPor('descripcion')">Comentarios</a>
                         <a class="caret" ng-click="ordenarPor('-descripcion')"></a>
-                    </th>
-                    <th>
-                        <a ng-click="ordenarPor('departamento')">Departamento</a>
-                        <a class="caret" ng-click="ordenarPor('-departamento')"></a>
-                    </th>
-                    <th>
-                        <a ng-click="ordenarPor('pais')">Pais</a>
-                        <a class="caret" ng-click="ordenarPor('-pais')"></a>
                     </th>
                     <th>
                         <a>Opcion</a>
@@ -91,17 +87,18 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="obj in produccions| orderBy:ordenarSeleccionado
+                <tr ng-repeat="obj in producciones| orderBy:ordenarSeleccionado
                 | filter:txtBuscar" ng-click="llenarCampos(obj)">
                 <td>{{obj.codigo}}</td>
-                <td>{{obj.nombre| uppercase}}</td>
+                <td>{{obj.tipo}}</td>
+                <td>{{obj.presentacion}}</td>
+                <td>{{obj.fecha| date:'shortDate'}}</td>
                 <td>{{obj.descripcion}}</td>
-                <td>{{obj.nombredepto| uppercase}}</td>
-                <td>{{obj.nombrepais| uppercase}}</td>
                 <td><input type="button" class="btn btn-default" value="Eliminar" 
-                   ng-click="eliminar(obj)"></td>
-               </tr>
-           </tbody>
-       </table>
-   </div>        
+                 ng-click="eliminarProduccion(obj)"></td>
+             </tr>
+         </tbody>
+     </table>
+ </div>        
 </div>
+</form>

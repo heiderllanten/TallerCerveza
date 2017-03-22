@@ -69,7 +69,7 @@ app.service('presentacionService', function ($http, $httpParamSerializerJQLike) 
         return promise;
     };
 
-    this.eliminarPresentacion = function (cerveza) {
+    this.eliminarPresentacion = function (presentacion) {
         var promise = $http({
             method: "delete",
             url: "/eliminarPresentacion",

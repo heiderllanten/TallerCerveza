@@ -21,15 +21,17 @@
  * datos diferente a como se hacia en jquery  y muchos webservices no encuentran
  * los datos que les llega, por lo que se hace necesario serializarlos como
  * jquery para que lleguen al servidor*/
-app.service('cervezaService', function ($http, $httpParamSerializerJQLike) {
-    this.crearCerveza = function (cerveza) {
+app.service('produccionService', function ($http, $httpParamSerializerJQLike) {
+    this.crearProduccion = function (produccion) {
         var promise = $http({
             method: "POST",
-            url: "/crearCerveza",
+            url: "/crearProduccion",
             data: $httpParamSerializerJQLike({
-                nombre: cerveza.nombre,
-                descripcion:cerveza.descripcion,
-                porcentaje_alcohol: cerveza.porcentaje_alcohol}),
+                codigo: produccion.codigo,
+                descripcion:produccion.descripcion,
+                fecha: produccion.fecha,
+                tipo: produccion.tipo,
+                presentacion: produccion.presentacion}),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(function mySucces(response) {
             return response.data;
@@ -40,14 +42,16 @@ app.service('cervezaService', function ($http, $httpParamSerializerJQLike) {
         return promise;
     };
 
-    this.editarCerveza = function (cerveza) {
+    this.editarProduccion = function (produccion) {
         var promise = $http({
             method: "put",
-            url: "/editarCerveza",
+            url: "/editarProduccion",
             data: $httpParamSerializerJQLike({
-                nombre: cerveza.nombre,
-                descripcion:cerveza.descripcion,
-                porcentaje_alcohol: cerveza.porcentaje_alcohol}),
+                codigo: produccion.codigo,
+                descripcion:produccion.descripcion,
+                tipo: produccion.tipo,
+                presentacion: produccion.presentacion,
+                fecha: produccion.fecha}),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(function mySucces(response) {
             return response.data;
@@ -61,7 +65,7 @@ app.service('cervezaService', function ($http, $httpParamSerializerJQLike) {
     this.listar = function () {
         var promise = $http({
             method: "get",
-            url: "/listarCervezas"
+            url: "/listarProducciones"
         }).then(function mySucces(response) {
             return response.data;
         }, function myError(response) {
@@ -71,12 +75,12 @@ app.service('cervezaService', function ($http, $httpParamSerializerJQLike) {
         return promise;
     };
 
-    this.eliminarcerveza = function (cerveza) {
+    this.eliminarProduccion = function (produccion) {
         var promise = $http({
             method: "delete",
-            url: "/eliminarcerveza",
+            url: "/eliminarProduccion",
             data: $httpParamSerializerJQLike({
-                nombre: cerveza.nombre}),
+                codigo: produccion.codigo}),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(function mySucces(response) {
             return response.data;
