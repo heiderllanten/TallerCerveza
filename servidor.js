@@ -5,6 +5,8 @@ var url = require('url');
 
 var fs = require('fs');
 
+var formidable = require('formidable');
+
 var querystring = require('querystring');
 var dao = require('./public/recursos/dao/dao');
 var servidor;
@@ -25,6 +27,10 @@ function configurarServidor() {
 		var ruta = definirRuta(entrada);
 		switch(ruta){
 			//si se mandaron los datos por POST
+			case 'public/subir':{
+				subir(entrada,respuesta);
+				break;
+			}
 			case 'public/crearCerveza':{
 				dao.crear(entrada,respuesta);
 				break;
@@ -112,6 +118,23 @@ function grabarIntento(entrada, respuesta){
 
 		grabarEnArchivo(datos);
 	});
+}
+
+function subir(pedido,respuesta){
+    var entrada= new formidable.IncomingForm();
+    
+    entrada.uploadDir='upload';
+    entrada.parse(pedido);
+    
+    entrada.on('fileBegin',function(field,file){
+       file.path="public/recursos/img/logo.jpg"; 
+    });
+
+    respuesta.writeHead(200, {
+	  'Location': '/#/logo'
+	  //add other headers here...
+	});
+	respuesta.end();
 }
 
 function grabarEnArchivo(datos){
