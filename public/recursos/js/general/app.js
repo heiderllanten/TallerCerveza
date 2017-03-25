@@ -20,6 +20,9 @@ app.config(function($routeProvider) {
 	.when("/presentacion", {
 		templateUrl : "vista/presentacion.html"
 	})
+	.when("/logo", {
+		templateUrl : "vista/logo.html"
+	})
 	.otherwise({
 		redirectTo: '/cerveza'
 	});

@@ -120,13 +120,15 @@ function listarCervezas(respuesta) {
             return;
         }else{
           var res='[';
-          for(var i=0;i<filas.length;i++){
-            res+='{';
-            res+='"nombre":"'+filas[i].nombre+'",';
-            res+='"descripcion":"'+filas[i].descripcion+'",';
-            res+='"porcentaje_alcohol":"'+filas[i].porcentaje_alcohol+'"},';
+          if(filas.length > 0){
+            for(var i=0;i<filas.length;i++){
+              res+='{';
+              res+='"nombre":"'+filas[i].nombre+'",';
+              res+='"descripcion":"'+filas[i].descripcion+'",';
+              res+='"porcentaje_alcohol":"'+filas[i].porcentaje_alcohol+'"},';
+            }
+            res=res.slice(0,-1);
           }
-          res=res.slice(0,-1);
           res+=']';
           console.log(res);
           respuesta.write(res);
@@ -148,13 +150,15 @@ function listarPresentaciones(respuesta) {
             return;
         }else{
           var res='[';
-          for(var i=0;i<filas.length;i++){
-            res+='{';
-            res+='"ml":"'+filas[i].ml+'",';
-            res+='"valor":"'+filas[i].valor+'"},';
+          if(filas.length > 0){
+            for(var i=0;i<filas.length;i++){
+              res+='{';
+              res+='"ml":"'+filas[i].ml+'",';
+              res+='"valor":"'+filas[i].valor+'"},';
 
+            }
+            res=res.slice(0,-1);
           }
-          res=res.slice(0,-1);
           res+=']';
           console.log(res);
           respuesta.write(res);
