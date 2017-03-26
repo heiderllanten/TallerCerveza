@@ -1,10 +1,12 @@
-<form method="post" action="/subir" enctype="multipart/form-data" style="margin-top: 
+<form id="logo-form" name="logoForm" nv-file-drop="" uploader="uploader" ng-controller="CtlLogo" style="margin-top: 
 80px; width: 600px;">	
 	<div class="page-header">
 		<h1>Seleccione el Logo</h1>
 	</div>
-	<input type="file" name="foto1" class="btn btn-default">
+	<input type="file" nv-file-select=""  class="btn btn-default"  uploader="uploader" />	
 	<br>
 
-	<input type="submit" value="confirmar" class="btn btn-default">
+	<button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+        <span class="glyphicon glyphicon-upload"></span> Subir
+	
 </form>
