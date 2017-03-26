@@ -6,7 +6,7 @@
 
 /*Se definen las depenciencias que seran utilizadas por el sistema, son varias
 * se separan asi: ['ngRoute', 'ngCookies', 'xxxxx']*/
-var app = angular.module('myModule', ['ngRoute']);
+var app = angular.module('myModule', ['ngRoute','angularFileUpload']);
 
 app.config(function($routeProvider) {
 	$routeProvider

@@ -130,11 +130,12 @@ function subir(pedido,respuesta){
        file.path="public/recursos/img/logo.jpg"; 
     });
 
-    respuesta.writeHead(200, {
-	  'Location': '/#/logo'
-	  //add other headers here...
-	});
-	respuesta.end();
+    entrada.on('end',function (){
+        respuesta.writeHead(200,{'Content-Type':'text/html'});
+        respuesta.write('<!doctype html><html><head></head><body>'+
+                'Archivo Subido<br><a href="index.html">Retornar</a></body></html>');
+        respuesta.end();
+    });
 }
 
 function grabarEnArchivo(datos){
